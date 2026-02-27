@@ -1,0 +1,21 @@
+UPLOAD TO GITHUB
+===============
+
+1. Go to https://github.com/new
+2. Create a new repository (e.g. "CC" or "catcall-app")
+3. Upload these files to the ROOT of the repo:
+   - index.html
+   - package.json
+   - package-lock.json
+   - vite.config.js
+   - vercel.json
+   - eslint.config.js
+   - .gitignore
+   - README.md
+   - src/ (entire folder)
+   - public/ (entire folder)
+
+4. Do NOT upload: node_modules, dist, .git, this UPLOAD_INSTRUCTIONS.txt
+
+5. In Vercel: Set Root Directory to EMPTY (leave blank)
+6. Redeploy
