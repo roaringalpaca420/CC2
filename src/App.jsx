@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { generateCatFromSeed, renderCatSVG } from "./catGenerator";
+import CatEditorV3 from "./CatEditorV3";
 
 // ── CAT DATABASE (fallback / legacy - procedural cats replace most encounters) ──
 const CATS = [
@@ -193,7 +194,7 @@ const CatCard = ({ cat, small }) => (
 );
 
 // ── MAIN APP ──
-export default function CatCallPrototype() {
+function CatCallPrototype() {
   const [screen, setScreen] = useState("HOME");
   const [mentor, setMentor] = useState(MENTOR_LINES.welcome);
   const [currentCat, setCurrentCat] = useState(null);
@@ -602,6 +603,38 @@ export default function CatCallPrototype() {
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
       `}</style>
+    </div>
+  );
+}
+
+// ── APP WITH TAB SWITCHER ──
+export default function App() {
+  const [tab, setTab] = useState("game");
+  return (
+    <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #0B1120 0%, #0F172A 40%, #1E1B2E 100%)" }}>
+      <div style={{ display: "flex", borderBottom: "1px solid #1E293B", background: "#0F172A" }}>
+        <button
+          onClick={() => setTab("game")}
+          style={{
+            flex: 1, padding: "12px 16px", border: "none", background: tab === "game" ? "#1E293B" : "transparent",
+            color: tab === "game" ? "#F8FAFC" : "#64748B", fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 600,
+            cursor: "pointer", borderBottom: tab === "game" ? "2px solid #6366F1" : "2px solid transparent",
+          }}
+        >
+          🐱 Game
+        </button>
+        <button
+          onClick={() => setTab("editor")}
+          style={{
+            flex: 1, padding: "12px 16px", border: "none", background: tab === "editor" ? "#1E293B" : "transparent",
+            color: tab === "editor" ? "#F8FAFC" : "#64748B", fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 600,
+            cursor: "pointer", borderBottom: tab === "editor" ? "2px solid #6366F1" : "2px solid transparent",
+          }}
+        >
+          🐾 Cat Editor V3
+        </button>
+      </div>
+      {tab === "game" ? <CatCallPrototype /> : <CatEditorV3 />}
     </div>
   );
 }
