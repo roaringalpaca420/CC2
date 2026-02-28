@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { generateCatFromSeed, renderCatSVG } from "./catGenerator";
 
-// ── CAT DATABASE ──
+// ── CAT DATABASE (fallback / legacy - procedural cats replace most encounters) ──
 const CATS = [
   { id: "c1", name: "Whiskers", rarity: "COMMON", behavior: "PLAYFUL", callType: "PSPS", pitchMin: 200, pitchMax: 500, volumeMin: 40, volumeMax: 75, emoji: "🐱", color: "#F59E0B", desc: "A friendly tabby who loves attention" },
   { id: "c2", name: "Shadow", rarity: "COMMON", behavior: "SHY", callType: "PSPS", pitchMin: 180, pitchMax: 450, volumeMin: 30, volumeMax: 60, emoji: "🐈‍⬛", color: "#6B7280", desc: "A quiet dark cat who prefers gentle calls" },
@@ -175,7 +176,13 @@ const CatCard = ({ cat, small }) => (
     boxShadow: `0 0 20px ${RARITY_CONFIG[cat.rarity].border}33`,
     ...(small ? { display: "flex", alignItems: "center", gap: 12, textAlign: "left" } : {}),
   }}>
-    <div style={{ fontSize: small ? 32 : 56, lineHeight: 1, ...(small ? {} : { marginBottom: 8 }) }}>{cat.emoji}</div>
+    <div style={{ width: small ? 64 : 120, height: small ? 64 : 120, flexShrink: 0, ...(small ? {} : { marginBottom: 8 }) }}>
+      {cat.genes ? (
+        <div style={{ width: "100%", height: "100%", overflow: "hidden", borderRadius: 12 }} dangerouslySetInnerHTML={{ __html: renderCatSVG(cat.genes) }} />
+      ) : (
+        <span style={{ fontSize: small ? 32 : 56, lineHeight: 1 }}>{cat.emoji}</span>
+      )}
+    </div>
     <div>
       <div style={{ fontFamily: "'Fredoka', sans-serif", fontSize: small ? 16 : 22, color: cat.color, fontWeight: 600 }}>{cat.name}</div>
       {!small && <RarityBadge rarity={cat.rarity} />}
@@ -235,8 +242,8 @@ export default function CatCallPrototype() {
         setScreen("RESULT");
         setScanCount(0);
       } else {
-        const pool = CATS.filter(c => c.rarity === result);
-        const cat = pool[Math.floor(Math.random() * pool.length)];
+        const encounterId = `enc_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+        const cat = generateCatFromSeed(encounterId, result);
         setCurrentCat(cat);
         setMentor(cat.rarity === "RARE" ? MENTOR_LINES.rare_spawn : MENTOR_LINES.encounter);
         setScreen("ENCOUNTER");
@@ -413,7 +420,13 @@ export default function CatCallPrototype() {
               }}>{callTimer}</div>
             </div>
 
-            <div style={{ fontSize: 56, textAlign: "center", animation: "float 1.5s ease-in-out infinite" }}>{currentCat.emoji}</div>
+            <div style={{ width: 100, height: 100, margin: "0 auto", animation: "float 1.5s ease-in-out infinite" }}>
+              {currentCat.genes ? (
+                <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: renderCatSVG(currentCat.genes) }} />
+              ) : (
+                <span style={{ fontSize: 56 }}>{currentCat.emoji}</span>
+              )}
+            </div>
 
             <div style={{ background: "#0F172A", borderRadius: 16, padding: 16, border: "1px solid #1E293B" }}>
               <p style={{ fontSize: 12, color: "#64748B", margin: "0 0 8px", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>Live Voice Analysis</p>
