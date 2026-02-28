@@ -179,7 +179,7 @@ const CatCard = ({ cat, small }) => (
   }}>
     <div style={{ width: small ? 64 : 120, height: small ? 64 : 120, flexShrink: 0, ...(small ? {} : { marginBottom: 8 }) }}>
       {cat.genes ? (
-        <div style={{ width: "100%", height: "100%", overflow: "hidden", borderRadius: 12 }} dangerouslySetInnerHTML={{ __html: renderCatSVG(cat.genes) }} />
+        <div style={{ width: "100%", height: "100%", overflow: "hidden", borderRadius: 12 }} dangerouslySetInnerHTML={{ __html: renderCatSVG(cat) }} />
       ) : (
         <span style={{ fontSize: small ? 32 : 56, lineHeight: 1 }}>{cat.emoji}</span>
       )}
@@ -423,7 +423,7 @@ function CatCallPrototype() {
 
             <div style={{ width: 100, height: 100, margin: "0 auto", animation: "float 1.5s ease-in-out infinite" }}>
               {currentCat.genes ? (
-                <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: renderCatSVG(currentCat.genes) }} />
+                <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: renderCatSVG(currentCat) }} />
               ) : (
                 <span style={{ fontSize: 56 }}>{currentCat.emoji}</span>
               )}
